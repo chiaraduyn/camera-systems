@@ -1,4 +1,4 @@
-# Camera Systems — Flood Monitoring Proposal & Setup
+# Camera Systems — Setup & Flood Monitoring Proposal
 
 This repository contains documentation, configuration templates, and scripts to set up cameras for flood monitoring. It is organized so both newcomers (students, field techs) and future reviewers (employers, auditors) can quickly find highlights and deep-dive into details.
 

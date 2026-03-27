@@ -1,0 +1,1252 @@
+﻿Scenario: Set up a Geovison camera that is directly connected to your Windows PC via Ethernet. 
+
+----
+NOTE: This file contains original raw notes. A cleaned, GitHub-friendly version of these instructions has been moved into `docs/geovision_setup.md` and per-camera templates under `cameras/`. See `README.md` and `HIGHLIGHTS.md` for an overview.
+
+
+You'll need to know:
+Your computers IP: 192.168.13.50 (from ipconfig)
+Subnet Mask: 255.255.255.0
+Camera IP: Assign manually if not already set (e.g., 192.168.13.100)
+
+
+**Note** Both devices must be on the same subnet to communicate.
+
+
+
+
+
+1. Install GeoVision Software
+1. Go to GeoVision official website → GV‑IP Camera software download
+2. Install GV‑EasySetup / WebConfig Plugin (required for GV‑TBL8804 web interface)
+3. Follow installation prompts: accept license, install drivers, allow firewall permissions.
+4. Restart laptop if prompted.
+
+
+    2. Firmware Update (Optional but Recommended)
+1. Log into camera via web interface (initial IP or default)
+2. Go to: Maintenance → Firmware Upgrade
+3. Upload latest .bin firmware file (downloaded from GeoVision)
+4. Wait for the camera to restart
+5. Confirm camera version in System Info
+________________
+
+
+3. Initial Network Setup (Direct to PC)
+
+
+1. Connect camera via Ethernet:
+   * Direct cable → your Windows PC (in my case HP laptop) Ethernet Port
+   * Or via PoE injector / small switch → Windows PC
+2. Set static IP addresses (if needed):
+   * Example:
+      * Camera: 192.168.13.100
+      * PC Ethernet: 192.168.13.50
+      * Subnet mask: 255.255.255.0
+      * Gateway: leave blank for direct connection
+3. Confirm access:
+   * Open browser → http://192.168.13.100
+   * Log in using GeoVision credentials
+
+
+
+________________
+
+
+4. FileZilla Server Setup on PC
+Make sure you have FileZilla installed and a folder for camera uploads:
+e.g., C:\Users\Guest-UH\Desktop\Geovision_FTP
+Step 1: Create FTP User
+1. Open FileZilla Server → Edit → Users
+
+2. Click Add → Username: geovision → OK
+
+3. Set password: geovision123
+
+4. Enable Password Authentication
+
+Step 2: Map Mount Point
+   1. In Users → Shared Folders → Add
+
+   2. Set Virtual Path: /
+
+   3. Set Native Path: C:\Users\Guest-UH\Desktop\Geovision_FTP
+
+   4. Enable permissions:
+
+      * Read ✔
+
+      * Write ✔
+
+      * Apply permissions to subdirectories ✔
+
+      * Create native directory if it does not exist ✔
+
+Step 3: Confirm Server Running
+         * FileZilla must show Listening on port 21
+
+         * Allow through Windows Firewall if needed
+
+         * Do NOT use 127.0.0.1 — the camera must connect using the real IP 192.168.13.50
+
+________________
+
+
+3️⃣ Camera FTP Page Configuration
+Page Location: GeoVision Web Interface → Network → FTP
+Field
+	Value
+	Notes
+	Server IP
+	192.168.13.50
+	Laptop Ethernet IP
+	Port No.
+	21
+	Default FTP port
+	Username
+	geovision
+	Matches FileZilla user
+	Password
+	geovision123
+	Match password set in FileZilla
+	Upload Images
+	✔ Photo
+	Only upload images, not video for now
+	File Path
+	/ or blank
+	Root of mapped folder
+	File Name
+	optional template
+	e.g., CAM1_%Y-%m-%d_%H-%M-%S.jpg
+	Overwrite
+	OFF
+	Prevents overwriting files
+	Test
+	Click after entering info
+	Watch FileZilla logs for:
+	
+
+	
+
+	Connection received → STOR image.jpg → OK
+	Tip: Only check Upload Images. Leave Video Upload and Recording unchecked for local testing.
+________________
+
+
+4️⃣ Motion Detection Rule Setup
+Page Location: GeoVision Web Interface → Event → Motion Detection
+Step 1: Enable Motion Detection
+            * Draw detection zones
+
+            * Set sensitivity: 55–65%
+
+            * Set object size: medium
+
+            * Test in live preview to confirm motion triggers
+
+Step 2: Create Event Rule
+               * Go to Event → Rule Settings → Conventional
+
+               * Trigger Source: Motion Detection
+
+               * Schedule: Always
+
+               * Attach Trigger Action: Upload to FTP
+
+               * Image upload settings: 1 image per trigger, 1 sec interval
+
+Step 3: Plan / Schedule
+                  * Enable Plan → ON
+
+                  * Set Armed for all 24h x 7 days (click drag across grid)
+
+                  * Save Plan
+
+                  * Confirm Rule Settings, Trigger Action, and Motion Detection are all ON
+
+________________
+
+
+5️⃣ Testing Workflow
+                     1. Clear the FTP folder: C:\Users\Guest-UH\Desktop\Geovision_FTP
+
+                     2. Trigger motion in camera view (walk in front)
+
+                     3. Verify images appear in the folder
+
+                     4. FileZilla Server logs should show:
+
+Connection received
+User geovision logged in
+STOR image.jpg
+Transfer complete
+
+                     5. If it fails:
+
+                        * Check FileZilla is running and listening on port 21
+
+                        * Ensure Windows Firewall allows connections
+
+                        * Confirm camera and laptop are on same subnet
+
+                        * Verify motion detection triggers and schedule is armed
+
+________________
+
+
+6️⃣ Optional Enhancements
+                           * Naming Convention:
+Use CAM1_%Y-%m-%d_%H-%M-%S.jpg for timestamps
+
+                           * Scheduled Snapshots:
+For flood monitoring, a snapshot every 5 minutes is often more reliable than motion triggers
+
+                           * Edge Cases:
+Unplug/replug Ethernet to test recovery
+
+                           * Future Modem Integration:
+Once PoE or field deployment is ready, the camera can use a Sierra Wireless modem with the same FTP rules for remote uploads
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Getting Geovision images online - using the Droplet as a bridge to the Space in a Windows environment 
+**command to ssh into droplet: ssh root@[yourdropletsipadress]
+Then will ask you to enter a password, this is you droplets password 
+
+
+Example prompt : 
+
+
+Microsoft Windows [Version 10.0.26200.8037]
+(c) Microsoft Corporation. All rights reserved.
+
+
+C:\Users\Guest-UH>ssh root@164.90.145.83
+The authenticity of host '164.90.145.83 (164.90.145.83)' can't be established.
+ED25519 key fingerprint is SHA256:jKAY+z9+NIRyicqBRZYslPS+Io2eAyt2EdHP4s3s+K0.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Please type 'yes', 'no' or the fingerprint: yes
+Warning: Permanently added '164.90.145.83' (ED25519) to the list of known hosts.
+root@164.90.145.83's password:
+Permission denied, please try again.
+root@164.90.145.83's password:
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-71-generic x86_64)
+
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+
+ System information as of Thu Mar 12 02:33:19 UTC 2026
+
+
+  System load:  0.0               Processes:             97
+  Usage of /:   26.3% of 8.65GB   Users logged in:       0
+  Memory usage: 41%               IPv4 address for eth0: 164.90.145.83
+  Swap usage:   0%                IPv4 address for eth0: 10.48.0.5
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+
+78 updates can be applied immediately.
+3 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+
+
+*** System restart required ***
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+
+root@Camera-FTP-Upload-Server:~# apt update && apt upgrade -y
+Hit:1 http://mirrors.digitalocean.com/ubuntu noble InRelease
+Hit:2 http://mirrors.digitalocean.com/ubuntu noble-updates InRelease
+Hit:3 http://mirrors.digitalocean.com/ubuntu noble-backports InRelease
+Hit:4 https://repos-droplet.digitalocean.com/apt/droplet-agent main InRelease
+Hit:5 http://security.ubuntu.com/ubuntu noble-security InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+78 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Calculating upgrade... Done
+The following packages will be upgraded:
+  apparmor base-files bsdextrautils bsdutils cloud-init coreutils curl dhcpcd-base distro-info-data eject fdisk fwupd
+  gir1.2-packagekitglib-1.0 initramfs-tools initramfs-tools-bin initramfs-tools-core kpartx landscape-common
+  libapparmor1 libblkid1 libcurl3t64-gnutls libcurl4t64 libdrm-common libdrm2 libfdisk1 libfwupd2 libldap-common
+  libldap2 libmbim-glib4 libmbim-proxy libmbim-utils libmount1 libnetplan1 libnftables1 libnss-systemd libnuma1
+  libpackagekit-glib2-18 libpam-systemd libsmartcols1 libsystemd-shared libsystemd0 libudev1 libuuid1 linux-base
+  motd-news-config mount multipath-tools netplan-generator netplan.io nftables numactl openssh-client openssh-server
+  openssh-sftp-server packagekit packagekit-tools powermgmt-base python-apt-common python3-apt python3-distupgrade
+  python3-netplan python3-software-properties snapd software-properties-common sosreport systemd systemd-dev
+  systemd-hwe-hwdb systemd-resolved systemd-sysv systemd-timesyncd tcpdump ubuntu-pro-client ubuntu-pro-client-l10n
+  ubuntu-release-upgrader-core udev util-linux uuid-runtime
+78 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+3 standard LTS security updates
+Need to get 58.8 MB/59.7 MB of archives.
+After this operation, 4865 kB of additional disk space will be used.
+Get:1 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 motd-news-config all 13ubuntu10.4 [4012 B]
+Get:2 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 base-files amd64 13ubuntu10.4 [73.3 kB]
+Get:3 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 bsdutils amd64 1:2.39.3-9ubuntu6.4 [95.6 kB]
+Get:4 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 coreutils amd64 9.4-3ubuntu6.1 [1413 kB]
+Get:5 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 util-linux amd64 2.39.3-9ubuntu6.4 [1128 kB]
+Get:6 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 mount amd64 2.39.3-9ubuntu6.4 [118 kB]
+Get:7 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libnss-systemd amd64 255.4-1ubuntu8.12 [159 kB]
+Get:8 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 systemd-dev all 255.4-1ubuntu8.12 [106 kB]
+Get:9 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libblkid1 amd64 2.39.3-9ubuntu6.4 [123 kB]
+Get:10 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 systemd-timesyncd amd64 255.4-1ubuntu8.12 [35.3 kB]
+Get:11 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 systemd-resolved amd64 255.4-1ubuntu8.12 [296 kB]
+Get:12 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libsystemd-shared amd64 255.4-1ubuntu8.12 [2077 kB]
+Get:13 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libsystemd0 amd64 255.4-1ubuntu8.12 [435 kB]
+Get:14 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 systemd-sysv amd64 255.4-1ubuntu8.12 [11.9 kB]
+Get:15 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libpam-systemd amd64 255.4-1ubuntu8.12 [235 kB]
+Get:16 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 systemd amd64 255.4-1ubuntu8.12 [3475 kB]
+Get:17 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 udev amd64 255.4-1ubuntu8.12 [1874 kB]
+Get:18 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libudev1 amd64 255.4-1ubuntu8.12 [177 kB]
+Get:19 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libapparmor1 amd64 4.0.1really4.0.1-0ubuntu0.24.04.5 [50.5 kB]
+Get:20 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libmount1 amd64 2.39.3-9ubuntu6.4 [134 kB]
+Get:21 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libuuid1 amd64 2.39.3-9ubuntu6.4 [35.9 kB]
+Get:22 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libfdisk1 amd64 2.39.3-9ubuntu6.4 [146 kB]
+Get:23 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libsmartcols1 amd64 2.39.3-9ubuntu6.4 [65.6 kB]
+Get:24 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 uuid-runtime amd64 2.39.3-9ubuntu6.4 [33.1 kB]
+Get:25 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 openssh-sftp-server amd64 1:9.6p1-3ubuntu13.14 [37.3 kB]
+Get:26 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 openssh-server amd64 1:9.6p1-3ubuntu13.14 [510 kB]
+Get:27 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 openssh-client amd64 1:9.6p1-3ubuntu13.14 [906 kB]
+Get:28 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 dhcpcd-base amd64 1:10.0.6-1ubuntu3.2 [215 kB]
+Get:29 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 distro-info-data all 0.60ubuntu0.5 [6934 B]
+Get:30 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 eject amd64 2.39.3-9ubuntu6.4 [26.3 kB]
+Get:31 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 netplan-generator amd64 1.1.2-8ubuntu1~24.04.1 [61.2 kB]
+Get:32 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 python3-netplan amd64 1.1.2-8ubuntu1~24.04.1 [24.3 kB]
+Get:33 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 initramfs-tools all 0.142ubuntu25.8 [9076 B]
+Get:34 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 initramfs-tools-core all 0.142ubuntu25.8 [50.5 kB]
+Get:35 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 initramfs-tools-bin amd64 0.142ubuntu25.8 [21.6 kB]
+Get:36 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 linux-base all 4.5ubuntu9+24.04.2 [19.6 kB]
+Get:37 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 netplan.io amd64 1.1.2-8ubuntu1~24.04.1 [69.7 kB]
+Get:38 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libnetplan1 amd64 1.1.2-8ubuntu1~24.04.1 [133 kB]
+Get:39 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 python-apt-common all 2.7.7ubuntu5.2 [20.6 kB]
+Get:40 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 python3-apt amd64 2.7.7ubuntu5.2 [169 kB]
+Get:41 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 systemd-hwe-hwdb all 255.1.7 [3716 B]
+Get:42 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 ubuntu-pro-client-l10n amd64 37.1ubuntu0~24.04 [19.8 kB]
+Get:43 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 ubuntu-pro-client amd64 37.1ubuntu0~24.04 [259 kB]
+Get:44 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 apparmor amd64 4.0.1really4.0.1-0ubuntu0.24.04.5 [638 kB]
+Get:45 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 bsdextrautils amd64 2.39.3-9ubuntu6.4 [73.7 kB]
+Get:46 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libdrm-common all 2.4.125-1ubuntu0.1~24.04.1 [9174 B]
+Get:47 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libdrm2 amd64 2.4.125-1ubuntu0.1~24.04.1 [41.3 kB]
+Get:48 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 nftables amd64 1.0.9-1ubuntu0.1 [69.8 kB]
+Get:49 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libnftables1 amd64 1.0.9-1ubuntu0.1 [359 kB]
+Get:50 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libnuma1 amd64 2.0.18-1ubuntu0.24.04.1 [23.4 kB]
+Get:51 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 numactl amd64 2.0.18-1ubuntu0.24.04.1 [39.1 kB]
+Get:52 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 powermgmt-base all 1.37ubuntu0.1 [7650 B]
+Get:53 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 ubuntu-release-upgrader-core all 1:24.04.28 [27.4 kB]
+Get:54 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 python3-distupgrade all 1:24.04.28 [125 kB]
+Get:55 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 tcpdump amd64 4.99.4-3ubuntu4.24.04.1 [479 kB]
+Get:56 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libldap2 amd64 2.6.10+dfsg-0ubuntu0.24.04.1 [198 kB]
+Get:57 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 fdisk amd64 2.39.3-9ubuntu6.4 [122 kB]
+Get:58 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libfwupd2 amd64 1.9.33-0ubuntu1~24.04.1ubuntu1 [137 kB]
+Get:59 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libmbim-proxy amd64 1.31.2-0ubuntu3.1 [6172 B]
+Get:60 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libmbim-glib4 amd64 1.31.2-0ubuntu3.1 [233 kB]
+Get:61 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 fwupd amd64 1.9.33-0ubuntu1~24.04.1ubuntu1 [4590 kB]
+Get:62 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libpackagekit-glib2-18 amd64 1.2.8-2ubuntu1.4 [120 kB]
+Get:63 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 gir1.2-packagekitglib-1.0 amd64 1.2.8-2ubuntu1.4 [25.6 kB]
+Get:64 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 landscape-common amd64 24.02-0ubuntu5.7 [93.8 kB]
+Get:65 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libldap-common all 2.6.10+dfsg-0ubuntu0.24.04.1 [32.9 kB]
+Get:66 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 libmbim-utils amd64 1.31.2-0ubuntu3.1 [71.6 kB]
+Get:67 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 packagekit-tools amd64 1.2.8-2ubuntu1.4 [28.3 kB]
+Get:68 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 packagekit amd64 1.2.8-2ubuntu1.4 [434 kB]
+Get:69 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 software-properties-common all 0.99.49.4 [14.4 kB]
+Get:70 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 python3-software-properties all 0.99.49.4 [30.0 kB]
+Get:71 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 snapd amd64 2.73+ubuntu24.04 [34.6 MB]
+Get:72 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 sosreport amd64 4.10.2-0ubuntu0~24.04.1 [381 kB]
+Get:73 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 cloud-init all 25.3-0ubuntu1~24.04.1 [628 kB]
+Get:74 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 kpartx amd64 0.9.4-5ubuntu8.1 [32.0 kB]
+Get:75 http://mirrors.digitalocean.com/ubuntu noble-updates/main amd64 multipath-tools amd64 0.9.4-5ubuntu8.1 [310 kB]
+Fetched 58.8 MB in 2s (24.4 MB/s)
+Extracting templates from packages: 100%
+Preconfiguring packages ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../motd-news-config_13ubuntu10.4_all.deb ...
+Unpacking motd-news-config (13ubuntu10.4) over (13ubuntu10.3) ...
+Preparing to unpack .../base-files_13ubuntu10.4_amd64.deb ...
+Unpacking base-files (13ubuntu10.4) over (13ubuntu10.3) ...
+Setting up base-files (13ubuntu10.4) ...
+Installing new version of config file /etc/issue ...
+Installing new version of config file /etc/issue.net ...
+Installing new version of config file /etc/lsb-release ...
+motd-news.service is a disabled or a static unit not running, not starting it.
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../bsdutils_1%3a2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking bsdutils (1:2.39.3-9ubuntu6.4) over (1:2.39.3-9ubuntu6.3) ...
+Setting up bsdutils (1:2.39.3-9ubuntu6.4) ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../coreutils_9.4-3ubuntu6.1_amd64.deb ...
+Unpacking coreutils (9.4-3ubuntu6.1) over (9.4-3ubuntu6) ...
+Setting up coreutils (9.4-3ubuntu6.1) ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../util-linux_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking util-linux (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Setting up util-linux (2.39.3-9ubuntu6.4) ...
+fstrim.service is a disabled or a static unit not running, not starting it.
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../mount_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking mount (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Preparing to unpack .../libnss-systemd_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking libnss-systemd:amd64 (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../systemd-dev_255.4-1ubuntu8.12_all.deb ...
+Unpacking systemd-dev (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../libblkid1_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking libblkid1:amd64 (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Setting up libblkid1:amd64 (2.39.3-9ubuntu6.4) ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../systemd-timesyncd_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking systemd-timesyncd (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../systemd-resolved_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking systemd-resolved (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../libsystemd-shared_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking libsystemd-shared:amd64 (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../libsystemd0_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking libsystemd0:amd64 (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Setting up libsystemd0:amd64 (255.4-1ubuntu8.12) ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../systemd-sysv_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking systemd-sysv (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../libpam-systemd_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking libpam-systemd:amd64 (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../systemd_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking systemd (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../udev_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking udev (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Preparing to unpack .../libudev1_255.4-1ubuntu8.12_amd64.deb ...
+Unpacking libudev1:amd64 (255.4-1ubuntu8.12) over (255.4-1ubuntu8.10) ...
+Setting up libudev1:amd64 (255.4-1ubuntu8.12) ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../libapparmor1_4.0.1really4.0.1-0ubuntu0.24.04.5_amd64.deb ...
+Unpacking libapparmor1:amd64 (4.0.1really4.0.1-0ubuntu0.24.04.5) over (4.0.1really4.0.1-0ubuntu0.24.04.4) ...
+Preparing to unpack .../libmount1_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking libmount1:amd64 (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Setting up libmount1:amd64 (2.39.3-9ubuntu6.4) ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../libuuid1_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking libuuid1:amd64 (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Setting up libuuid1:amd64 (2.39.3-9ubuntu6.4) ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../libfdisk1_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking libfdisk1:amd64 (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Preparing to unpack .../libsmartcols1_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking libsmartcols1:amd64 (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Setting up libsmartcols1:amd64 (2.39.3-9ubuntu6.4) ...
+(Reading database ... 106437 files and directories currently installed.)
+Preparing to unpack .../00-uuid-runtime_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking uuid-runtime (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Preparing to unpack .../01-openssh-sftp-server_1%3a9.6p1-3ubuntu13.14_amd64.deb ...
+Unpacking openssh-sftp-server (1:9.6p1-3ubuntu13.14) over (1:9.6p1-3ubuntu13.13) ...
+Preparing to unpack .../02-openssh-server_1%3a9.6p1-3ubuntu13.14_amd64.deb ...
+Unpacking openssh-server (1:9.6p1-3ubuntu13.14) over (1:9.6p1-3ubuntu13.13) ...
+Preparing to unpack .../03-openssh-client_1%3a9.6p1-3ubuntu13.14_amd64.deb ...
+Unpacking openssh-client (1:9.6p1-3ubuntu13.14) over (1:9.6p1-3ubuntu13.13) ...
+Preparing to unpack .../04-dhcpcd-base_1%3a10.0.6-1ubuntu3.2_amd64.deb ...
+Unpacking dhcpcd-base (1:10.0.6-1ubuntu3.2) over (1:10.0.6-1ubuntu3.1) ...
+Preparing to unpack .../05-distro-info-data_0.60ubuntu0.5_all.deb ...
+Unpacking distro-info-data (0.60ubuntu0.5) over (0.60ubuntu0.3) ...
+Preparing to unpack .../06-eject_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking eject (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Preparing to unpack .../07-netplan-generator_1.1.2-8ubuntu1~24.04.1_amd64.deb ...
+Adding 'diversion of /lib/systemd/system-generators/netplan to /lib/systemd/system-generators/netplan.usr-is-merged by netplan-generator'
+Unpacking netplan-generator (1.1.2-8ubuntu1~24.04.1) over (1.1.2-2~ubuntu24.04.2) ...
+Preparing to unpack .../08-python3-netplan_1.1.2-8ubuntu1~24.04.1_amd64.deb ...
+Unpacking python3-netplan (1.1.2-8ubuntu1~24.04.1) over (1.1.2-2~ubuntu24.04.2) ...
+Preparing to unpack .../09-initramfs-tools_0.142ubuntu25.8_all.deb ...
+Unpacking initramfs-tools (0.142ubuntu25.8) over (0.142ubuntu25.5) ...
+Preparing to unpack .../10-initramfs-tools-core_0.142ubuntu25.8_all.deb ...
+Unpacking initramfs-tools-core (0.142ubuntu25.8) over (0.142ubuntu25.5) ...
+Preparing to unpack .../11-initramfs-tools-bin_0.142ubuntu25.8_amd64.deb ...
+Unpacking initramfs-tools-bin (0.142ubuntu25.8) over (0.142ubuntu25.5) ...
+Preparing to unpack .../12-linux-base_4.5ubuntu9+24.04.2_all.deb ...
+Unpacking linux-base (4.5ubuntu9+24.04.2) over (4.5ubuntu9+24.04.1) ...
+Preparing to unpack .../13-netplan.io_1.1.2-8ubuntu1~24.04.1_amd64.deb ...
+Unpacking netplan.io (1.1.2-8ubuntu1~24.04.1) over (1.1.2-2~ubuntu24.04.2) ...
+Preparing to unpack .../14-libnetplan1_1.1.2-8ubuntu1~24.04.1_amd64.deb ...
+Unpacking libnetplan1:amd64 (1.1.2-8ubuntu1~24.04.1) over (1.1.2-2~ubuntu24.04.2) ...
+Preparing to unpack .../15-python-apt-common_2.7.7ubuntu5.2_all.deb ...
+Unpacking python-apt-common (2.7.7ubuntu5.2) over (2.7.7ubuntu5.1) ...
+Preparing to unpack .../16-python3-apt_2.7.7ubuntu5.2_amd64.deb ...
+Unpacking python3-apt (2.7.7ubuntu5.2) over (2.7.7ubuntu5.1) ...
+Preparing to unpack .../17-systemd-hwe-hwdb_255.1.7_all.deb ...
+Unpacking systemd-hwe-hwdb (255.1.7) over (255.1.4) ...
+Preparing to unpack .../18-ubuntu-pro-client-l10n_37.1ubuntu0~24.04_amd64.deb ...
+Unpacking ubuntu-pro-client-l10n (37.1ubuntu0~24.04) over (36ubuntu0~24.04) ...
+Preparing to unpack .../19-ubuntu-pro-client_37.1ubuntu0~24.04_amd64.deb ...
+Unpacking ubuntu-pro-client (37.1ubuntu0~24.04) over (36ubuntu0~24.04) ...
+Preparing to unpack .../20-apparmor_4.0.1really4.0.1-0ubuntu0.24.04.5_amd64.deb ...
+Unpacking apparmor (4.0.1really4.0.1-0ubuntu0.24.04.5) over (4.0.1really4.0.1-0ubuntu0.24.04.4) ...
+Preparing to unpack .../21-bsdextrautils_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking bsdextrautils (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Preparing to unpack .../22-libdrm-common_2.4.125-1ubuntu0.1~24.04.1_all.deb ...
+Unpacking libdrm-common (2.4.125-1ubuntu0.1~24.04.1) over (2.4.122-1~ubuntu0.24.04.1) ...
+Preparing to unpack .../23-libdrm2_2.4.125-1ubuntu0.1~24.04.1_amd64.deb ...
+Unpacking libdrm2:amd64 (2.4.125-1ubuntu0.1~24.04.1) over (2.4.122-1~ubuntu0.24.04.1) ...
+Preparing to unpack .../24-nftables_1.0.9-1ubuntu0.1_amd64.deb ...
+Unpacking nftables (1.0.9-1ubuntu0.1) over (1.0.9-1build1) ...
+Preparing to unpack .../25-libnftables1_1.0.9-1ubuntu0.1_amd64.deb ...
+Unpacking libnftables1:amd64 (1.0.9-1ubuntu0.1) over (1.0.9-1build1) ...
+Preparing to unpack .../26-libnuma1_2.0.18-1ubuntu0.24.04.1_amd64.deb ...
+Unpacking libnuma1:amd64 (2.0.18-1ubuntu0.24.04.1) over (2.0.18-1build1) ...
+Preparing to unpack .../27-numactl_2.0.18-1ubuntu0.24.04.1_amd64.deb ...
+Unpacking numactl (2.0.18-1ubuntu0.24.04.1) over (2.0.18-1build1) ...
+Preparing to unpack .../28-powermgmt-base_1.37ubuntu0.1_all.deb ...
+Unpacking powermgmt-base (1.37ubuntu0.1) over (1.37) ...
+Preparing to unpack .../29-ubuntu-release-upgrader-core_1%3a24.04.28_all.deb ...
+Unpacking ubuntu-release-upgrader-core (1:24.04.28) over (1:24.04.27) ...
+Preparing to unpack .../30-python3-distupgrade_1%3a24.04.28_all.deb ...
+Unpacking python3-distupgrade (1:24.04.28) over (1:24.04.27) ...
+Preparing to unpack .../31-tcpdump_4.99.4-3ubuntu4.24.04.1_amd64.deb ...
+Unpacking tcpdump (4.99.4-3ubuntu4.24.04.1) over (4.99.4-3ubuntu4) ...
+Preparing to unpack .../32-libldap2_2.6.10+dfsg-0ubuntu0.24.04.1_amd64.deb ...
+Unpacking libldap2:amd64 (2.6.10+dfsg-0ubuntu0.24.04.1) over (2.6.7+dfsg-1~exp1ubuntu8.2) ...
+Preparing to unpack .../33-curl_8.5.0-2ubuntu10.8_amd64.deb ...
+Unpacking curl (8.5.0-2ubuntu10.8) over (8.5.0-2ubuntu10.7) ...
+Preparing to unpack .../34-libcurl4t64_8.5.0-2ubuntu10.8_amd64.deb ...
+Unpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.8) over (8.5.0-2ubuntu10.7) ...
+Preparing to unpack .../35-fdisk_2.39.3-9ubuntu6.4_amd64.deb ...
+Unpacking fdisk (2.39.3-9ubuntu6.4) over (2.39.3-9ubuntu6.3) ...
+Preparing to unpack .../36-libcurl3t64-gnutls_8.5.0-2ubuntu10.8_amd64.deb ...
+Unpacking libcurl3t64-gnutls:amd64 (8.5.0-2ubuntu10.8) over (8.5.0-2ubuntu10.7) ...
+Preparing to unpack .../37-libfwupd2_1.9.33-0ubuntu1~24.04.1ubuntu1_amd64.deb ...
+Unpacking libfwupd2:amd64 (1.9.33-0ubuntu1~24.04.1ubuntu1) over (1.9.30-0ubuntu1~24.04.1) ...
+Preparing to unpack .../38-libmbim-proxy_1.31.2-0ubuntu3.1_amd64.deb ...
+Unpacking libmbim-proxy (1.31.2-0ubuntu3.1) over (1.31.2-0ubuntu3) ...
+Preparing to unpack .../39-libmbim-glib4_1.31.2-0ubuntu3.1_amd64.deb ...
+Unpacking libmbim-glib4:amd64 (1.31.2-0ubuntu3.1) over (1.31.2-0ubuntu3) ...
+Preparing to unpack .../40-fwupd_1.9.33-0ubuntu1~24.04.1ubuntu1_amd64.deb ...
+Unpacking fwupd (1.9.33-0ubuntu1~24.04.1ubuntu1) over (1.9.30-0ubuntu1~24.04.1) ...
+Preparing to unpack .../41-libpackagekit-glib2-18_1.2.8-2ubuntu1.4_amd64.deb ...
+Unpacking libpackagekit-glib2-18:amd64 (1.2.8-2ubuntu1.4) over (1.2.8-2ubuntu1.2) ...
+Preparing to unpack .../42-gir1.2-packagekitglib-1.0_1.2.8-2ubuntu1.4_amd64.deb ...
+Unpacking gir1.2-packagekitglib-1.0 (1.2.8-2ubuntu1.4) over (1.2.8-2ubuntu1.2) ...
+Preparing to unpack .../43-landscape-common_24.02-0ubuntu5.7_amd64.deb ...
+Unpacking landscape-common (24.02-0ubuntu5.7) over (24.02-0ubuntu5.3) ...
+Preparing to unpack .../44-libldap-common_2.6.10+dfsg-0ubuntu0.24.04.1_all.deb ...
+Unpacking libldap-common (2.6.10+dfsg-0ubuntu0.24.04.1) over (2.6.7+dfsg-1~exp1ubuntu8.2) ...
+Preparing to unpack .../45-libmbim-utils_1.31.2-0ubuntu3.1_amd64.deb ...
+Unpacking libmbim-utils (1.31.2-0ubuntu3.1) over (1.31.2-0ubuntu3) ...
+Preparing to unpack .../46-packagekit-tools_1.2.8-2ubuntu1.4_amd64.deb ...
+Unpacking packagekit-tools (1.2.8-2ubuntu1.4) over (1.2.8-2ubuntu1.2) ...
+Preparing to unpack .../47-packagekit_1.2.8-2ubuntu1.4_amd64.deb ...
+Unpacking packagekit (1.2.8-2ubuntu1.4) over (1.2.8-2ubuntu1.2) ...
+Preparing to unpack .../48-software-properties-common_0.99.49.4_all.deb ...
+Unpacking software-properties-common (0.99.49.4) over (0.99.49.2) ...
+Preparing to unpack .../49-python3-software-properties_0.99.49.4_all.deb ...
+Unpacking python3-software-properties (0.99.49.4) over (0.99.49.2) ...
+Preparing to unpack .../50-snapd_2.73+ubuntu24.04_amd64.deb ...
+Unpacking snapd (2.73+ubuntu24.04) over (2.68.5+ubuntu24.04.1) ...
+Preparing to unpack .../51-sosreport_4.10.2-0ubuntu0~24.04.1_amd64.deb ...
+Unpacking sosreport (4.10.2-0ubuntu0~24.04.1) over (4.8.2-0ubuntu0~24.04.2) ...
+Preparing to unpack .../52-cloud-init_25.3-0ubuntu1~24.04.1_all.deb ...
+Unpacking cloud-init (25.3-0ubuntu1~24.04.1) over (25.1.4-0ubuntu0~24.04.1) ...
+Preparing to unpack .../53-kpartx_0.9.4-5ubuntu8.1_amd64.deb ...
+Unpacking kpartx (0.9.4-5ubuntu8.1) over (0.9.4-5ubuntu8) ...
+Preparing to unpack .../54-multipath-tools_0.9.4-5ubuntu8.1_amd64.deb ...
+Unpacking multipath-tools (0.9.4-5ubuntu8.1) over (0.9.4-5ubuntu8) ...
+Setting up powermgmt-base (1.37ubuntu0.1) ...
+Setting up motd-news-config (13ubuntu10.4) ...
+Setting up tcpdump (4.99.4-3ubuntu4.24.04.1) ...
+Setting up libapparmor1:amd64 (4.0.1really4.0.1-0ubuntu0.24.04.5) ...
+Setting up libnftables1:amd64 (1.0.9-1ubuntu0.1) ...
+Setting up linux-base (4.5ubuntu9+24.04.2) ...
+Setting up nftables (1.0.9-1ubuntu0.1) ...
+Setting up bsdextrautils (2.39.3-9ubuntu6.4) ...
+Setting up distro-info-data (0.60ubuntu0.5) ...
+Setting up openssh-client (1:9.6p1-3ubuntu13.14) ...
+Setting up libpackagekit-glib2-18:amd64 (1.2.8-2ubuntu1.4) ...
+Setting up systemd-dev (255.4-1ubuntu8.12) ...
+Setting up libnetplan1:amd64 (1.1.2-8ubuntu1~24.04.1) ...
+Setting up libldap-common (2.6.10+dfsg-0ubuntu0.24.04.1) ...
+Setting up eject (2.39.3-9ubuntu6.4) ...
+Setting up apparmor (4.0.1really4.0.1-0ubuntu0.24.04.5) ...
+Installing new version of config file /etc/apparmor.d/abstractions/dri-enumerate ...
+Installing new version of config file /etc/apparmor.d/abstractions/mesa ...
+Installing new version of config file /etc/apparmor.d/abstractions/opencl-intel ...
+Installing new version of config file /etc/apparmor.d/abstractions/opencl-nvidia ...
+Installing new version of config file /etc/apparmor.d/abstractions/opencl-pocl ...
+Installing new version of config file /etc/apparmor.d/abstractions/video ...
+Installing new version of config file /etc/apparmor.d/abstractions/vulkan ...
+Installing new version of config file /etc/apparmor.d/nvidia_modprobe ...
+Installing new version of config file /etc/apparmor.d/tunables/global ...
+/var/lib/dpkg/info/apparmor.postinst: 148: [: Illegal number: yes
+Reloading AppArmor profiles
+Setting up gir1.2-packagekitglib-1.0 (1.2.8-2ubuntu1.4) ...
+Setting up libsystemd-shared:amd64 (255.4-1ubuntu8.12) ...
+Setting up dhcpcd-base (1:10.0.6-1ubuntu3.2) ...
+Setting up sosreport (4.10.2-0ubuntu0~24.04.1) ...
+Installing new version of config file /etc/sos/sos.conf ...
+Setting up libfdisk1:amd64 (2.39.3-9ubuntu6.4) ...
+Setting up libnuma1:amd64 (2.0.18-1ubuntu0.24.04.1) ...
+Setting up python-apt-common (2.7.7ubuntu5.2) ...
+Setting up mount (2.39.3-9ubuntu6.4) ...
+Setting up uuid-runtime (2.39.3-9ubuntu6.4) ...
+uuidd.service is a disabled or a static unit not running, not starting it.
+Setting up python3-netplan (1.1.2-8ubuntu1~24.04.1) ...
+Setting up packagekit (1.2.8-2ubuntu1.4) ...
+Setting up libdrm-common (2.4.125-1ubuntu0.1~24.04.1) ...
+Setting up libldap2:amd64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...
+Setting up libmbim-glib4:amd64 (1.31.2-0ubuntu3.1) ...
+Setting up initramfs-tools-bin (0.142ubuntu25.8) ...
+Setting up packagekit-tools (1.2.8-2ubuntu1.4) ...
+Setting up openssh-sftp-server (1:9.6p1-3ubuntu13.14) ...
+Setting up numactl (2.0.18-1ubuntu0.24.04.1) ...
+Setting up openssh-server (1:9.6p1-3ubuntu13.14) ...
+Setting up libcurl4t64:amd64 (8.5.0-2ubuntu10.8) ...
+Setting up python3-apt (2.7.7ubuntu5.2) ...
+Setting up libcurl3t64-gnutls:amd64 (8.5.0-2ubuntu10.8) ...
+Setting up systemd (255.4-1ubuntu8.12) ...
+Setting up libmbim-proxy (1.31.2-0ubuntu3.1) ...
+Setting up python3-distupgrade (1:24.04.28) ...
+Setting up landscape-common (24.02-0ubuntu5.7) ...
+Setting up fdisk (2.39.3-9ubuntu6.4) ...
+Setting up python3-software-properties (0.99.49.4) ...
+Setting up systemd-timesyncd (255.4-1ubuntu8.12) ...
+Setting up udev (255.4-1ubuntu8.12) ...
+Setting up ubuntu-release-upgrader-core (1:24.04.28) ...
+Setting up systemd-hwe-hwdb (255.1.7) ...
+Setting up libdrm2:amd64 (2.4.125-1ubuntu0.1~24.04.1) ...
+Setting up kpartx (0.9.4-5ubuntu8.1) ...
+Setting up curl (8.5.0-2ubuntu10.8) ...
+Setting up netplan-generator (1.1.2-8ubuntu1~24.04.1) ...
+Removing 'diversion of /lib/systemd/system-generators/netplan to /lib/systemd/system-generators/netplan.usr-is-merged by netplan-generator'
+Setting up libmbim-utils (1.31.2-0ubuntu3.1) ...
+Setting up initramfs-tools-core (0.142ubuntu25.8) ...
+Setting up ubuntu-pro-client (37.1ubuntu0~24.04) ...
+Installing new version of config file /etc/apparmor.d/ubuntu_pro_apt_news ...
+Installing new version of config file /etc/apparmor.d/ubuntu_pro_esm_cache ...
+Setting up systemd-resolved (255.4-1ubuntu8.12) ...
+Setting up ubuntu-pro-client-l10n (37.1ubuntu0~24.04) ...
+Setting up snapd (2.73+ubuntu24.04) ...
+Installing new version of config file /etc/apparmor.d/usr.lib.snapd.snap-confine.real ...
+Installing new version of config file /etc/profile.d/apps-bin-path.sh ...
+snapd.failure.service is a disabled or a static unit not running, not starting it.
+snapd.gpio-chardev-setup.target is a disabled or a static unit not running, not starting it.
+snapd.snap-repair.service is a disabled or a static unit not running, not starting it.
+Setting up systemd-sysv (255.4-1ubuntu8.12) ...
+Setting up initramfs-tools (0.142ubuntu25.8) ...
+update-initramfs: deferring update (trigger activated)
+Setting up libfwupd2:amd64 (1.9.33-0ubuntu1~24.04.1ubuntu1) ...
+Setting up libnss-systemd:amd64 (255.4-1ubuntu8.12) ...
+Setting up software-properties-common (0.99.49.4) ...
+Setting up multipath-tools (0.9.4-5ubuntu8.1) ...
+Setting up netplan.io (1.1.2-8ubuntu1~24.04.1) ...
+Setting up libpam-systemd:amd64 (255.4-1ubuntu8.12) ...
+Setting up fwupd (1.9.33-0ubuntu1~24.04.1ubuntu1) ...
+fwupd-offline-update.service is a disabled or a static unit not running, not starting it.
+fwupd-refresh.service is a disabled or a static unit not running, not starting it.
+fwupd.service is a disabled or a static unit not running, not starting it.
+Setting up cloud-init (25.3-0ubuntu1~24.04.1) ...
+Installing new version of config file /etc/cloud/templates/sources.list.debian.deb822.tmpl ...
+Processing triggers for rsyslog (8.2312.0-3ubuntu9.1) ...
+Processing triggers for ufw (0.36.2-6) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for plymouth-theme-ubuntu-text (24.004.60-1ubuntu7.1) ...
+update-initramfs: deferring update (trigger activated)
+Processing triggers for dbus (1.14.10-4ubuntu4.1) ...
+Processing triggers for install-info (7.1-3build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+Processing triggers for initramfs-tools (0.142ubuntu25.8) ...
+update-initramfs: Generating /boot/initrd.img-6.8.0-101-generic
+Scanning processes...
+Scanning candidates...
+Scanning linux images...
+
+
+Pending kernel upgrade!
+Running kernel version:
+  6.8.0-71-generic
+Diagnostics:
+  The currently running kernel version is not the expected kernel version 6.8.0-101-generic.
+
+
+Restarting the system to load the new kernel will not be handled automatically, so you should consider rebooting.
+
+
+Restarting services...
+ systemctl restart polkit.service udisks2.service
+
+
+Service restarts being deferred:
+ systemctl restart ModemManager.service
+ /etc/needrestart/restart.d/dbus.service
+ systemctl restart getty@tty1.service
+ systemctl restart serial-getty@ttyS0.service
+ systemctl restart systemd-logind.service
+ systemctl restart unattended-upgrades.service
+
+
+No containers need to be restarted.
+
+
+User sessions running outdated binaries:
+ root @ session #906: apt[91630], bash[91280], sshd[91167]
+ root @ user manager service: systemd[91172]
+
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+root@Camera-FTP-Upload-Server:~# client_loop: send disconnect: Connection reset
+
+
+C:\Users\Guest-UH>
+
+
+
+
+
+
+
+
+
+
+
+
+Sierra Wirless modem confuguration: 
+
+
+—--------------------------------------------------------
+To update firmware and reconfigure sierra wireless rv55 modem, first hard reset (hold until power flashes amber not red!), then download new firmware  from the source.sierrawirelss site ( select RV55 ALEOS Firmware ALEOS 4.16.2.001). Now open up acemanager but change port to 9191 and https to http for recovery page and upload firmware file there. So instead of https://192.168.13.31:9443 should be http://192.168.13.31:9191. Make sure wifi is turned off on pc and ethernet connection from pc to rv55. 
+—--------------------------------------------------------

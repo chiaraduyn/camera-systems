@@ -1,0 +1,8 @@
+{
+  "camera_model": "GV-TBL8804",
+  "ip": "192.168.13.100",
+  "ftp_server": "192.168.13.50",
+  "ftp_user": "<replace-with-ftp-user>",
+  "ftp_password": "<DO NOT COMMIT PASSWORD; use environment variables or a local secrets file>",
+  "snapshot_interval_minutes": 5
+}

@@ -1,0 +1,14 @@
+# Ignore local installers, secrets, and OS files
+/software/
+*.exe
+*.bin
+*.zip
+*.tar.gz
+
+# Local secrets and environment
+.env
+secrets.json
+*.key
+
+# macOS
+.DS_Store

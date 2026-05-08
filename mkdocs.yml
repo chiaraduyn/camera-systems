@@ -1,0 +1,21 @@
+site_name: Camera Systems Docs
+site_description: Documentation for the camera-systems repository
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Highlights: highlights.md
+  - Proposal: proposal.md
+  - Setup Checklist: setup_checklist.md
+  - Software Inventory: software_inventory.md
+  - Scenarios:
+    - Droplet → Spaces: scenarios/droplet_to_spaces.md
+    - FileZilla FTP: scenarios/filezilla_ftp.md
+    - GeoVision Direct: scenarios/geovision_direct.md
+    - Reolink FTP → Spaces: scenarios/reolink_ftp_to_spaces.md
+    - Sierra RV55: scenarios/sierra_rv55.md
+  - Cameras: cameras.md
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true

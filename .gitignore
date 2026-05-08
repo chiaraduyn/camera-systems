@@ -9,6 +9,9 @@
 .env
 secrets.json
 *.key
+.venv/
+venv/
+env/
 
 # macOS
 .DS_Store

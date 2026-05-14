@@ -6,12 +6,12 @@ This repository contains documentation, configuration templates, and scripts to 
 
 Top-level overview:
 
-- [README.md](../README.md) — quick orientation.
+- README.md — quick orientation for the repository.
 - [HIGHLIGHTS.md](highlights.md) — one-page summary for reviewers or employers.
 - [PROPOSAL.md](proposal.md) — project proposal checklist and deliverables.
-- [docs/](.) — step-by-step guides and scenario documents (setup, network, FTP, motion rules, modem recovery, cloud bridge).
-- [cameras/](../cameras) — per-camera folders; each contains configs, sample images, and notes.
-- [scripts/](../scripts) — small helper scripts (tests, rotation, automation examples).
+- docs/ — step-by-step guides and scenario documents (setup, network, FTP, motion rules, modem recovery, cloud bridge).
+- cameras/ — per-camera folders; each contains configs, sample images, and notes.
+- scripts/ — small helper scripts (tests, rotation, automation examples).
 - [SOFTWARE_INVENTORY.md](software_inventory.md) — canonical place to list installers, downloads, checksums, and commands used.
 
 For contributors: keep secrets out of git (use local `.env` files, OS keychains, or a `secrets/` directory that is gitignored). When adding a new camera type, create `cameras/<vendor>/` and a scenario in `docs/scenarios/`.

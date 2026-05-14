@@ -1,0 +1,1209 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the camera-systems repository">
+      
+      
+      
+      
+        <link rel="prev" href="../geovision_direct/">
+      
+      
+        <link rel="next" href="../sierra_rv55/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Reolink FTP → Spaces - Camera Systems Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#scenario-reolink-droplet-ftp-digitalocean-spaces" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Camera Systems Docs" class="md-header__button md-logo" aria-label="Camera Systems Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Camera Systems Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Reolink FTP → Spaces
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Camera Systems Docs" class="md-nav__button md-logo" aria-label="Camera Systems Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Camera Systems Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../highlights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Highlights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../proposal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proposal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../geovision_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GeoVision Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup_checklist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup Checklist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software_inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scenarios
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scenarios
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../droplet_to_spaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Droplet → Spaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filezilla_ftp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FileZilla FTP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geovision_direct/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GeoVision Direct
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reolink FTP → Spaces
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reolink FTP → Spaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-ssh-into-droplet-and-run-ftp-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: SSH into Droplet and Run FTP Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-configure-rclone-for-spaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Configure rclone for Spaces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-enable-the-sync-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Enable the Sync Service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-configure-reolink-app-ftp-upload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Configure Reolink App FTP Upload
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-monitor-sync-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Monitor Sync Progress
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-the-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing the Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ftp-connection-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FTP Connection Fails
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spaces-upload-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spaces Upload Fails
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-not-being-synced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files Not Being Synced
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-deployment-command-one-liner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Deployment Command (One-Liner)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sierra_rv55/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sierra RV55
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cameras/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cameras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-ssh-into-droplet-and-run-ftp-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: SSH into Droplet and Run FTP Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-configure-rclone-for-spaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Configure rclone for Spaces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-enable-the-sync-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Enable the Sync Service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-configure-reolink-app-ftp-upload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Configure Reolink App FTP Upload
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-monitor-sync-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Monitor Sync Progress
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-the-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing the Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ftp-connection-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FTP Connection Fails
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spaces-upload-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spaces Upload Fails
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-not-being-synced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files Not Being Synced
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-deployment-command-one-liner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Deployment Command (One-Liner)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="scenario-reolink-droplet-ftp-digitalocean-spaces">Scenario: Reolink → Droplet FTP → DigitalOcean Spaces<a class="headerlink" href="#scenario-reolink-droplet-ftp-digitalocean-spaces" title="Permanent link">&para;</a></h1>
+<p><strong>Goal</strong>: Stream camera images from Reolink app → FTP server on your Ubuntu Droplet → Automatically sync to DigitalOcean Spaces bucket.</p>
+<hr />
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>DigitalOcean Droplet running Ubuntu (164.90.145.83)</li>
+<li>DigitalOcean Spaces bucket: <code>photo-ftp-store</code> (sfo3)</li>
+<li>Access Key: <code>DO8016PL8P9XJZMHVQ9P</code></li>
+<li>Secret Key: (stored securely, not in git)</li>
+<li>Reolink camera configured to upload via FTP</li>
+</ul>
+<hr />
+<h2 id="step-1-ssh-into-droplet-and-run-ftp-setup">Step 1: SSH into Droplet and Run FTP Setup<a class="headerlink" href="#step-1-ssh-into-droplet-and-run-ftp-setup" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">ssh root@164.90.145.83
+</code></pre>
+<p>Download and run the setup script:</p>
+<pre><code class="language-bash">curl -o setup_droplet_ftp.sh https://raw.githubusercontent.com/&lt;YOUR_REPO&gt;/camera-systems/main/scripts/setup_droplet_ftp.sh
+bash setup_droplet_ftp.sh
+</code></pre>
+<p><strong>What it does:</strong>
+- Installs vsftpd (FTP server)
+- Creates <code>/home/camera_upload</code> directory for FTP uploads
+- Creates <code>geovision</code> FTP user
+- Configures vsftpd to allow uploads</p>
+<hr />
+<h2 id="step-2-configure-rclone-for-spaces">Step 2: Configure rclone for Spaces<a class="headerlink" href="#step-2-configure-rclone-for-spaces" title="Permanent link">&para;</a></h2>
+<p>Still SSH'd into the Droplet, run:</p>
+<pre><code class="language-bash">curl -o configure_rclone.sh https://raw.githubusercontent.com/&lt;YOUR_REPO&gt;/camera-systems/main/scripts/configure_rclone.sh
+bash configure_rclone.sh
+</code></pre>
+<p><strong>Edit the rclone config with your secret key:</strong></p>
+<pre><code class="language-bash">nano /root/.config/rclone/rclone.conf
+</code></pre>
+<p>Update this line with your actual DigitalOcean Spaces secret key:</p>
+<pre><code>secret_access_key = DO8016PL8P9XJZMHVQ9P  &lt;-- Replace with actual secret
+</code></pre>
+<p>Save with <code>Ctrl+X</code>, then <code>Y</code>, then <code>Enter</code>.</p>
+<p><strong>Test the connection:</strong></p>
+<pre><code class="language-bash">rclone --config /root/.config/rclone/rclone.conf lsd do_spaces:
+</code></pre>
+<p>Should list your Spaces bucket contents.</p>
+<hr />
+<h2 id="step-3-enable-the-sync-service">Step 3: Enable the Sync Service<a class="headerlink" href="#step-3-enable-the-sync-service" title="Permanent link">&para;</a></h2>
+<p>Install and enable the systemd service to automatically sync uploads:</p>
+<pre><code class="language-bash"># Copy sync script to system location
+sudo cp scripts/spaces_sync_watch.sh /usr/local/bin/
+sudo chmod +x /usr/local/bin/spaces_sync_watch.sh
+
+# Copy systemd service
+sudo cp scripts/spaces-sync.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable spaces-sync
+sudo systemctl start spaces-sync
+
+# Check status
+sudo systemctl status spaces-sync
+</code></pre>
+<hr />
+<h2 id="step-4-configure-reolink-app-ftp-upload">Step 4: Configure Reolink App FTP Upload<a class="headerlink" href="#step-4-configure-reolink-app-ftp-upload" title="Permanent link">&para;</a></h2>
+<p>In your Reolink app or camera web UI:</p>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>Network</strong> → <strong>FTP</strong></li>
+<li><strong>Server IP</strong>: <code>164.90.145.83</code></li>
+<li><strong>Server Port</strong>: <code>21</code></li>
+<li><strong>Username</strong>: <code>geovision</code></li>
+<li><strong>Password</strong>: <code>geovision</code> (change this in <code>/etc/vsftpd.conf</code> on the Droplet for security)</li>
+<li><strong>Enable "Upload Images"</strong> or <strong>"Upload on Motion"</strong></li>
+<li><strong>Test connection</strong> - should succeed</li>
+</ol>
+<hr />
+<h2 id="step-5-monitor-sync-progress">Step 5: Monitor Sync Progress<a class="headerlink" href="#step-5-monitor-sync-progress" title="Permanent link">&para;</a></h2>
+<p>SSH into Droplet and watch the sync logs:</p>
+<pre><code class="language-bash">tail -f /var/log/spaces-sync.log
+</code></pre>
+<p>Or check systemd journal:</p>
+<pre><code class="language-bash">journalctl -u spaces-sync -f
+</code></pre>
+<hr />
+<h2 id="testing-the-pipeline">Testing the Pipeline<a class="headerlink" href="#testing-the-pipeline" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Trigger an upload from Reolink</strong></li>
+<li>
+<p>Take a snapshot or motion capture in the Reolink app</p>
+</li>
+<li>
+<p><strong>Verify FTP upload</strong>
+   <code>bash
+   ssh root@164.90.145.83 "ls -la /home/camera_upload/"</code></p>
+</li>
+<li>
+<p><strong>Verify Spaces sync</strong>
+   <code>bash
+   rclone --config /root/.config/rclone/rclone.conf ls do_spaces:photo-ftp-store/camera-uploads</code></p>
+</li>
+</ol>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="ftp-connection-fails">FTP Connection Fails<a class="headerlink" href="#ftp-connection-fails" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Test FTP from local machine
+./scripts/check_ftp_connect.sh 164.90.145.83 geovision geovision
+
+# Or check if vsftpd is running
+ssh root@164.90.145.83 &quot;systemctl status vsftpd&quot;
+</code></pre>
+<h3 id="spaces-upload-fails">Spaces Upload Fails<a class="headerlink" href="#spaces-upload-fails" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Check rclone config
+ssh root@164.90.145.83 &quot;rclone --config /root/.config/rclone/rclone.conf fsinfo do_spaces:&quot;
+
+# Verify credentials
+ssh root@164.90.145.83 &quot;cat /root/.config/rclone/rclone.conf&quot;
+</code></pre>
+<h3 id="files-not-being-synced">Files Not Being Synced<a class="headerlink" href="#files-not-being-synced" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Check if sync service is running
+ssh root@164.90.145.83 &quot;systemctl status spaces-sync&quot;
+
+# Check for inotify support
+ssh root@164.90.145.83 &quot;apt install inotify-tools -y&quot;
+</code></pre>
+<hr />
+<h2 id="security-notes">Security Notes<a class="headerlink" href="#security-notes" title="Permanent link">&para;</a></h2>
+<p>⚠️ <strong>Production Considerations:</strong></p>
+<ol>
+<li>
+<p><strong>Change FTP password</strong>:
+   <code>bash
+   ssh root@164.90.145.83 "echo 'geovision:STRONG_PASSWORD' | chpasswd"</code></p>
+</li>
+<li>
+<p><strong>Use SFTP instead of FTP</strong> (more secure):</p>
+</li>
+<li>Install openssh-server on Droplet (usually pre-installed)</li>
+<li>
+<p>Configure camera to use SFTP (port 22)</p>
+</li>
+<li>
+<p><strong>Restrict uploads by file age</strong>:
+   <code>bash
+   # Uncomment in spaces_sync_watch.sh to delete files after sync
+   # find "$UPLOAD_DIR" -type f -mtime +1 -delete</code></p>
+</li>
+<li>
+<p><strong>Store credentials securely</strong>:</p>
+</li>
+<li>Keep Spaces secret key in <code>.env</code> or OS keychain</li>
+<li>Never commit to git</li>
+<li>Rotate keys periodically</li>
+</ol>
+<hr />
+<h2 id="full-deployment-command-one-liner">Full Deployment Command (One-Liner)<a class="headerlink" href="#full-deployment-command-one-liner" title="Permanent link">&para;</a></h2>
+<p>SSH into Droplet and run:</p>
+<pre><code class="language-bash">apt update &amp;&amp; apt install -y vsftpd curl inotify-tools &amp;&amp; \
+mkdir -p /home/camera_upload &amp;&amp; chmod 755 /home/camera_upload &amp;&amp; \
+useradd -d /home/camera_upload -s /usr/sbin/nologin -m geovision 2&gt;/dev/null || true &amp;&amp; \
+echo &quot;geovision:geovision&quot; | chpasswd &amp;&amp; \
+curl https://rclone.org/install.sh | bash &amp;&amp; \
+echo &quot;✓ Setup complete! Configure rclone.conf and enable sync service.&quot;
+</code></pre>
+<hr />
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>../droplet_to_spaces.md</code> — High-level architecture overview</li>
+<li><code>../filezilla_ftp.md</code> — Local Windows FTP server alternative</li>
+<li><code>../../SOFTWARE_INVENTORY.md</code> — Tool versions and updates</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
